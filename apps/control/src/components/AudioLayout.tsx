@@ -5,7 +5,11 @@ import { Participant, RemoteParticipant } from "livekit-client";
 const onlyPerformers = (p: Participant) => {
   try {
     const meta = JSON.parse(p.metadata || "");
-    return meta?.type === "PERFORMER" || meta?.type === "SCOUT";
+    return (
+      meta?.type === "PERFORMER" ||
+      meta?.type === "SCOUT" ||
+      meta?.type === "CONTROL"
+    );
   } catch (err) {
     return false;
   }
@@ -49,6 +53,10 @@ const AudioTrack = ({
   const audioTrack = audioTrackPublication?.track;
 
   useEffect(() => {
+    if (audioTrackPublication && !audioTrackPublication.isSubscribed) {
+      audioTrackPublication.setSubscribed(true);
+    }
+
     if (!audioTrack) {
       return;
     }
@@ -56,11 +64,6 @@ const AudioTrack = ({
     if (!audioElem.current) {
       return;
     }
-
-    if (!audioTrackPublication.isSubscribed) {
-      audioTrackPublication.setSubscribed(true);
-    }
-
     audioTrack.attach(audioElem.current);
 
     audioTrackPublication.setEnabled(!muted);
