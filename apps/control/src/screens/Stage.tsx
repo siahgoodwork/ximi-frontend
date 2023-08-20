@@ -30,10 +30,13 @@ import {
   ChatboxSharp,
   ExitSharp,
   Eye,
+  MicOff,
   MicSharp,
   TextSharp,
   VideocamSharp,
   VolumeHighSharp,
+  VolumeMute,
+  VolumeMuteOutline,
 } from "react-ionicons";
 import VideoPanel from "../components/VideoPanel";
 import PosterTextPanel from "../components/PosterTextPanel";
@@ -518,6 +521,7 @@ export default function Stage({
 }
 
 function MicControls({ room }: { room: Room | undefined }) {
+  const [muted, setMuted] = useState(false);
   if (room?.state !== "connected") {
     return <></>;
   }
@@ -548,6 +552,39 @@ function MicControls({ room }: { room: Room | undefined }) {
       >
         <MicSharp color="white" />
       </button>
+      <button
+        disabled={room.localParticipant.audioTracks.size < 1}
+        className={muted ? "muted" : ""}
+        onClick={async () => {
+          const tracks = Array.from(room.localParticipant.audioTracks.values());
+          if (tracks.length < 1) {
+            return;
+          }
+
+          if (muted) {
+            await Promise.all(
+              tracks.map((track) => {
+                return track.unmute();
+              })
+            );
+            setMuted(false);
+          } else {
+            await Promise.all(
+              tracks.map((track) => {
+                return track.mute();
+              })
+            );
+
+            setMuted(true);
+          }
+        }}
+      >
+        {muted ? (
+          <VolumeMute color="white" />
+        ) : (
+          <VolumeMuteOutline color="white" />
+        )}
+      </button>
     </StyledMicControls>
   );
 }
@@ -558,6 +595,8 @@ const StyledMicControls = styled("div", {
   left: "20px",
   background: "$background",
   zIndex: "5",
+  display: "flex",
+  gap: "$xs",
 
   button: {
     background: "transparent",
@@ -570,8 +609,16 @@ const StyledMicControls = styled("div", {
     height: "40px",
     cursor: "pointer",
 
+    "&[disabled]": {
+      opacity: 0.5,
+    },
+
     "&.active": {
       background: "$brand",
+    },
+
+    "&.muted": {
+      background: "$negative",
     },
   },
 });
