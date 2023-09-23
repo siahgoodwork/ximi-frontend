@@ -24,7 +24,7 @@ function App() {
     // get param upon load
     const query = queryString.parse(window.location.search);
     setWithAudio(() => query.withAudio === "true");
-    setWithVideo(() => query.withVideo === "false");
+    setWithVideo(() => query.withVideo === "true");
 
     const joinPayload = {
       participant_type: "OUTPUT",
@@ -76,7 +76,11 @@ function App() {
       {thisParticipant && (
         <>
           {withAudio && (
-            <PerformerAudio performer={thisParticipant} delay={delay} />
+            <PerformerAudio
+              performer={thisParticipant}
+              delay={delay}
+              iconColor={withVideo ? "white" : "#aaaaaa"}
+            />
           )}
           {withVideo && <PerformerVideo performer={thisParticipant} />}
         </>
@@ -90,9 +94,11 @@ export default App;
 const PerformerAudio = ({
   performer,
   delay,
+  iconColor,
 }: {
   performer: Participant;
   delay: number;
+  iconColor: string;
 }) => {
   const [start, setStart] = useState<boolean>(false);
 
@@ -175,7 +181,7 @@ const PerformerAudio = ({
             border: 0,
           }}
         >
-          <VolumeHighOutline color={"white"} />
+          <VolumeHighOutline color={iconColor} />
         </button>
       )}
       <audio ref={audioRef as LegacyRef<HTMLAudioElement>} />
