@@ -552,7 +552,7 @@ export default function AudioMixCard({
               <Button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `${process.env.REACT_APP_OUTPUT_HOST}/?room=${roomName}&passcode=${passcode}&target=${thisParticipant.identity}&withAudio=false`
+                    `${process.env.REACT_APP_OUTPUT_HOST}/?room=${roomName}&passcode=${passcode}&target=${thisParticipant.identity}&withAudio=false&withVideo=true`
                   );
                   toast({
                     title: "Copied",
@@ -604,7 +604,7 @@ export default function AudioMixCard({
               <Button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `${process.env.REACT_APP_OUTPUT_HOST}/?room=${roomName}&passcode=${passcode}&target=${thisParticipant.identity}&withAudio=true`
+                    `${process.env.REACT_APP_OUTPUT_HOST}/?room=${roomName}&passcode=${passcode}&target=${thisParticipant.identity}&withAudio=true&withVideo=true`
                   );
                   toast({
                     title: "Copied",
