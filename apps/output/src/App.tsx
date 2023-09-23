@@ -16,6 +16,7 @@ function App() {
   const { participants, connect } = useRoom();
   const [target, setTarget] = useState<string>();
   const [withAudio, setWithAudio] = useState<boolean>(false);
+  const [withVideo, setWithVideo] = useState<boolean>(true);
   const thisParticipant = participants.find((p) => p.identity === target);
   const [delay, setDelay] = useState(0);
 
@@ -23,6 +24,7 @@ function App() {
     // get param upon load
     const query = queryString.parse(window.location.search);
     setWithAudio(() => query.withAudio === "true");
+    setWithVideo(() => query.withVideo === "false");
 
     const joinPayload = {
       participant_type: "OUTPUT",
@@ -76,7 +78,7 @@ function App() {
           {withAudio && (
             <PerformerAudio performer={thisParticipant} delay={delay} />
           )}
-          <PerformerVideo performer={thisParticipant} />
+          {withVideo && <PerformerVideo performer={thisParticipant} />}
         </>
       )}
     </div>

@@ -578,6 +578,32 @@ export default function AudioMixCard({
               <Button
                 onClick={() => {
                   navigator.clipboard.writeText(
+                    `${process.env.REACT_APP_OUTPUT_HOST}/?room=${roomName}&passcode=${passcode}&target=${thisParticipant.identity}&withVideo=false&withAudio=true`
+                  );
+                  toast({
+                    title: "Copied",
+                    description: `${thisParticipant.identity} audio only link`,
+                  });
+                }}
+                size="sm"
+                variant="outline"
+                css={{
+                  path: {
+                    fill: "$text",
+                  },
+                  span: {
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                }}
+              >
+                <VolumeHighSharp color="inherit" width="21px" />
+              </Button>
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(
                     `${process.env.REACT_APP_OUTPUT_HOST}/?room=${roomName}&passcode=${passcode}&target=${thisParticipant.identity}&withAudio=true`
                   );
                   toast({
